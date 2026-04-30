@@ -118,6 +118,20 @@ namespace ProyectoMini
                 MessageBox.Show("Error al borrar: " + ex.Message);
             }
         }
+
+        private void btnsalir_Click_1(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("¿Desea cerrar sesión?", "Mensaje Importante", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            if (result == DialogResult.OK)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void guna2Panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
     
 }
