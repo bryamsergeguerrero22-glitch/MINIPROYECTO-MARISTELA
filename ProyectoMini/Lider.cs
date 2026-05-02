@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
 namespace ProyectoMini
@@ -203,6 +204,25 @@ namespace ProyectoMini
             {
                 MessageBox.Show("Error al capturar datos para editar: " + ex.Message);
             }
+        }
+
+        private void btnsalir_Click_1(object sender, EventArgs e)
+        {
+            DialogResult resultado = MessageBox.Show("¿Está seguro de que desea salir?",
+                                            "Confirmar salida",
+                                            MessageBoxButtons.YesNo,
+                                            MessageBoxIcon.Question);
+
+            
+            if (resultado == DialogResult.Yes)
+            {
+                Application.Exit();
+            }
+        }
+
+        private void lblRolUsuario_Click(object sender, EventArgs e)
+        {
+
         }
     }
     

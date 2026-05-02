@@ -14,8 +14,13 @@ namespace ProyectoMini
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
+            // Se comenta la siguiente línea para permitir que el MonthCalendar 
+            // cambie su color de fondo (BackColor) al verde menta.
+            // Application.EnableVisualStyles();
+
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Iniciamos con Form1 (asegúrate de que este es el formulario que quieres abrir primero)
             Application.Run(new Form1());
         }
     }

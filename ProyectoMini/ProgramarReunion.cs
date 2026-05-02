@@ -304,6 +304,15 @@ namespace ProyectoMini
         {
 
         }
+
+        private void btnsalir_Click_1(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("¿ desea salir ?", "mensaje importante", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            if (result == DialogResult.OK)
+            {
+                Application.Exit();
+            }
+        }
     }
 }
 
