@@ -14,7 +14,7 @@ namespace ProyectoMini
 
         private void guna2GradientButton1_Click(object sender, EventArgs e)
         {
-      
+
             // === PREPARACIÓN VISUAL ===
             guna2WinProgressIndicator1.Visible = true;
             guna2WinProgressIndicator1.Start();
@@ -39,7 +39,7 @@ namespace ProyectoMini
                 );
 
                 // 4. Ejecutar búsqueda
-                var usuarioEncontrado = collection.Find(filtro).FirstOrDefault();
+                var usuarioEncontrado = collection.Find(filtro).FirstOrDefault();//Busca todo los documentos que cumplan con el filtro, trae el primer resultado y si no lo muestra nulo en else
 
                 // 5. Validar resultado
                 if (usuarioEncontrado != null)
@@ -65,28 +65,23 @@ namespace ProyectoMini
                 }
                 else
                 {
-                    // === CASO: CREDENCIALES INCORRECTAS ===
+                    //CASO: CREDENCIALES INCORRECTAS
                     MessageBox.Show("El ID o la contraseña son incorrectos.",
                                     "Error de Autenticación", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    // Limpiar campos
+                    LimpiarCampos();
 
                     // DETENER ANIMACIÓN AQUÍ
                     DetenerCarga();
                 }
             }
-            catch (FormatException)
-            {
-                // === CASO: LETRAS EN LUGAR DE NÚMEROS ===
-                MessageBox.Show("Por favor, ingresa únicamente números en los campos de ID y Contraseña.",
-                                "Datos inválidos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
-                // DETENER ANIMACIÓN AQUÍ
-                DetenerCarga();
-            }
             catch (Exception ex)
             {
                 // === CASO: ERROR DE BASE DE DATOS O RED ===
-                MessageBox.Show("Error al intentar conectar con la base de datos:\n" + ex.Message,
+                MessageBox.Show("\n" + ex.Message,
                                 "Error Crítico", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                // Limpiar campos
+                LimpiarCampos();
 
                 // DETENER ANIMACIÓN AQUÍ
                 DetenerCarga();
@@ -100,6 +95,26 @@ namespace ProyectoMini
             guna2WinProgressIndicator1.Visible = false;
             guna2GradientButton1.Enabled = true; // Volvemos a habilitar el botón para que reintente
         }
+
+
+
+        private void txtID_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsDigit(e.KeyChar) && e.KeyChar != (char)Keys.Back)
+            {
+                e.Handled = true;
+                MessageBox.Show("Solo se permite números", "Información importante", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void LimpiarCampos()
+        {
+            txtID.Text = "";
+            txtPassword.Text = "";
+            txtID.Focus(); 
+        }
+
+        
     }
 }
 

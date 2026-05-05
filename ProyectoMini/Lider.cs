@@ -37,9 +37,9 @@ namespace ProyectoMini
 
         private void Lider_Load(object sender, EventArgs e)
         {
-            // Reemplaza con tu cadena de conexión si es distinta
+            // Conexion a la base de datos y a la coleccion
             var client = new MongoClient("mongodb://localhost:27017/");
-            database = client.GetDatabase("Base_datos_Reunion"); // El nombre de tu BD
+            database = client.GetDatabase("Base_datos_Reunion");
             usuariosCollection = database.GetCollection<BsonDocument>("Usuario");
             reunionesCollection = database.GetCollection<BsonDocument>("Reunion");
         }
@@ -56,13 +56,13 @@ namespace ProyectoMini
                 // 1. Pipeline de agregación ajustado a los nuevos campos de texto
                 var pipeline = new[]
                 {
-            new BsonDocument("$lookup", new BsonDocument
-            {
+                new BsonDocument("$lookup", new BsonDocument
+                {
                 { "from", "Usuario" },
                 { "localField", "Participantes" },
                 { "foreignField", "Nombres" },
                 { "as", "info_participantes" }
-            }),
+                }),
             new BsonDocument("$match", new BsonDocument("$or", new BsonArray
             {
                 new BsonDocument("Creador", usuarioLogueado),
@@ -71,9 +71,9 @@ namespace ProyectoMini
             new BsonDocument("$project", new BsonDocument
             {
                 { "ID", "$_id" },
-                { "Fecha", "$fechaReunion" },      // Ahora es String
-                { "HoraIni", "$horaInicio" },      // Ahora es String
-                { "HoraFin", "$horaFin" },         // Ahora es String
+                { "Fecha", "$fechaReunion" },      
+                { "HoraIni", "$horaInicio" },      
+                { "HoraFin", "$horaFin" },         
                 { "Descripción", "$descripcionReunion" },
                 { "Lugar", "$Lugar" },
                 { "Org", "$Creador" },
@@ -96,11 +96,6 @@ namespace ProyectoMini
                 // 3. Recorremos los resultados leyendo TEXTO puro
                 foreach (var doc in resultados)
                 {
-                    // Ya no usamos ToUniversalTime porque ya no son objetos Date
-                    string fecha = doc.Contains("Fecha") ? doc["Fecha"].ToString() : "N/A";
-                    string inicio = doc.Contains("HoraIni") ? doc["HoraIni"].ToString() : "00:00";
-                    string fin = doc.Contains("HoraFin") ? doc["HoraFin"].ToString() : "00:00";
-
                     // Procesar asistentes
                     string nombresAsistentes = "";
                     if (doc.Contains("Asistentes") && doc["Asistentes"].IsBsonArray)
@@ -111,9 +106,11 @@ namespace ProyectoMini
 
                     dt.Rows.Add(
                         doc["ID"].ToString(),
-                        fecha,
-                        inicio, // Mostrará el texto tal cual: "13:00"
-                        fin,    // Mostrará el texto tal cual: "15:00"
+                        doc.Contains("Fecha") ? doc["Fecha"].ToString() : "N/A",
+                        doc.Contains("HoraIni") ? doc["HoraIni"].ToString() : "00:00",
+                        doc.Contains("HoraFin") ? doc["HoraFin"].ToString() : "00:00",//fecha,
+                                                                                               // inicio, // Mostrará el texto tal cual: "13:00"
+                                                                                               // fin,    // Mostrará el texto tal cual: "15:00"
                         doc.Contains("Descripción") ? doc["Descripción"].ToString() : "N/A",
                         doc["Lugar"].ToString(),
                         doc.Contains("Org") ? doc["Org"].ToString() : "N/A",
@@ -122,15 +119,16 @@ namespace ProyectoMini
                 }
 
                 gunaDGVConsultarLider.DataSource = dt;
+                gunaDGVConsultarLider.ClearSelection();
 
                 if (resultados.Count == 0)
                 {
-                    MessageBox.Show("No se encontraron reuniones.");
+                    MessageBox.Show("No se encontraron reuniones.", "Mensaje Importante", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error en consulta Líder: " + ex.Message);
+                MessageBox.Show("Error en consulta Líder: " + ex.Message, "Mensaje Importante", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -141,59 +139,30 @@ namespace ProyectoMini
             this.Hide();
         }
 
-        private void CargarConsultasDeUsuario()
-        {
-            try
-            {
-                // El nombre del usuario que inició sesión (el que está en tu Label)
-                string nombreActual = lblNombreUsuario.Text;
-
-                // FILTRO SIMPLE: Busca donde el nombre esté en el arreglo "participantes"
-                var filtro = Builders<BsonDocument>.Filter.AnyEq("participantes", nombreActual);
-
-                // Obtenemos los documentos
-                var misReuniones = reunionesCollection.Find(filtro).ToList();
-
-                // Llenar el DataGridView (dgvConsultas) de forma automática
-               gunaDGVConsultarLider.DataSource = misReuniones.Select(r => new {
-                    Fecha = r["fechaReunion"].ToUniversalTime().ToLocalTime().ToString("dd/MM/yyyy HH:mm"),
-                    Descripción = r["descripcionReunion"].AsString,
-                    Ubicación = r["Lugar"].AsString,
-                    Organizador = r.Contains("creador") ? r["creador"].AsString : "N/A"
-                }).ToList();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al consultar: " + ex.Message);
-            }
-        }
-
         private void guna2btnModificarReunion_Click(object sender, EventArgs e)
         {
             // VALIDACIÓN CRÍTICA: Si no hay filas, no hacemos nada
             if (gunaDGVConsultarLider.SelectedRows.Count == 0)
             {
-                MessageBox.Show("Por favor, selecciona una fila completa en la tabla.");
+                MessageBox.Show("Por favor, selecciona una fila completa en la tabla.", "Mensaje Importante", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             try
             {
-                // Extraemos el ID de la fila seleccionada
-                // Asegúrate que "ID" coincida con el nombre de la columna en tu DataTable
-                var valorId = gunaDGVConsultarLider.SelectedRows[0].Cells["ID"].Value;
+                // 2. Si pasó la validación, obtenemos el ID con seguridad
+                var fila = gunaDGVConsultarLider.SelectedRows[0];
+                var valorId = fila.Cells["ID"].Value;
 
                 if (valorId != null)
                 {
                     int idSeleccionado = int.Parse(valorId.ToString());
 
-                    // Buscamos el documento en la BD
                     var filtro = Builders<BsonDocument>.Filter.Eq("_id", idSeleccionado);
                     var reunion = reunionesCollection.Find(filtro).FirstOrDefault();
 
                     if (reunion != null)
                     {
-                        // PASO CLAVE: Usar el constructor que recibe el BsonDocument
                         ProgramarReunion frmEditar = new ProgramarReunion(lblNombreUsuario.Text, "Lider", reunion);
                         frmEditar.Show();
                         this.Hide();
@@ -202,27 +171,19 @@ namespace ProyectoMini
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al capturar datos para editar: " + ex.Message);
+                MessageBox.Show("Error al capturar datos para editar: " + ex.Message, "Mensaje Importante", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
             }
         }
-
-        private void btnsalir_Click_1(object sender, EventArgs e)
+        private void btnsalir_Click_2(object sender, EventArgs e)
         {
-            DialogResult resultado = MessageBox.Show("¿Está seguro de que desea salir?",
-                                            "Confirmar salida",
-                                            MessageBoxButtons.YesNo,
-                                            MessageBoxIcon.Question);
+            DialogResult result = MessageBox.Show("¿Desea cerrar sesión?", "Mensaje Importante", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
 
-            
-            if (resultado == DialogResult.Yes)
+            if (result == DialogResult.OK)
             {
-                Application.Exit();
+                Form1 Inicio = new Form1();
+                Inicio.Show();
+                this.Close();
             }
-        }
-
-        private void lblRolUsuario_Click(object sender, EventArgs e)
-        {
-
         }
     }
     

@@ -147,12 +147,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Conexion.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Conexion.Designer.cs">
-      <DependentUpon>Conexion.cs</DependentUpon>
-    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

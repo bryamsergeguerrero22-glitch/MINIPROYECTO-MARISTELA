@@ -105,8 +105,86 @@ namespace ProyectoMini
                     return;
                 }
 
-                // --- 4. DEFINIR EL ID ---
+                // === AQUÍ VA EL NUEVO BLOQUE DE VALIDACIÓN ===
+
+                // 1. Buscamos todas las reuniones que ya existen en esa misma fecha
+                var filtroFecha = Builders<BsonDocument>.Filter.Eq("fechaReunion", fechaTexto);
+                var reunionesDelDia = reunionesCollection.Find(filtroFecha).ToList();
                 int idReunion = esEdicion ? reunionAEditar["_id"].AsInt32 : GenerarSiguienteID();
+
+                foreach (var reunionExistente in reunionesDelDia)
+                {
+                    // =========================
+                    // VALIDACIÓN DE EDICIÓN
+                    // =========================
+                    // Si estamos en modo edición, ignoramos la reunión actual
+                    // para no compararla consigo misma
+                    if (esEdicion && reunionExistente["_id"].AsInt32 == idReunion)
+                        continue;
+
+                    // =========================
+                    // OBTENCIÓN DE HORARIOS EXISTENTES
+                    // =========================
+                    // Se convierten las horas almacenadas en MongoDB a TimeSpan
+                    var exInicio = TimeSpan.Parse(reunionExistente["horaInicio"].AsString);
+                    var exFin = TimeSpan.Parse(reunionExistente["horaFin"].AsString);
+
+                    // =========================
+                    // NORMALIZACIÓN DE LUGAR
+                    // =========================
+                    // Se normaliza el texto para evitar diferencias por mayúsculas/minúsculas o espacios
+                    var lugarExistente = reunionExistente["Lugar"].ToString().Trim().ToLower();
+                    var lugarNuevo = guna2TextBox2.Text.Trim().ToLower();
+
+                    // =========================
+                    // VALIDACIÓN DE CRUCE DE HORARIOS
+                    // =========================
+                    // Se determina si las reuniones se traslapan en el tiempo
+                    bool hayCruceHorario = (horaInicio < exFin && horaFin > exInicio);
+
+                    // =========================
+                    // VALIDACIÓN 1: CONFLICTO POR PARTICIPANTES
+                    // =========================
+                    // Se obtienen los participantes de la reunión existente en BD
+                    var participantesBD = reunionExistente["Participantes"]
+                        .AsBsonArray
+                        .Select(p => p.ToString())
+                        .ToList();
+
+                    // Se comparan con los participantes seleccionados en la nueva reunión
+                    var comunes = seleccionados.Intersect(participantesBD).ToList();
+
+                    // Si hay personas en común y el horario se cruza, existe conflicto
+                    if (comunes.Count > 0 && hayCruceHorario)
+                    {
+                        string nombresOcupados = string.Join(", ", comunes);
+
+                        MessageBox.Show(
+                            $"{nombresOcupados} ya tienen una reunión de {exInicio:hh\\:mm} a {exFin:hh\\:mm}.",
+                            "Horario Ocupado",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+
+                        return; // Se detiene el proceso de guardado
+                    }
+
+                    // =========================
+                    // VALIDACIÓN 2: CONFLICTO POR LUGAR Y HORARIO
+                    // =========================
+                    // No se permite programar dos reuniones en el mismo lugar y horario,
+                    // independientemente de los participantes
+                    if (lugarExistente == lugarNuevo && hayCruceHorario)
+                    {
+                        MessageBox.Show(
+                            $"Ya existe una reunión programada en '{lugarNuevo}' en ese horario.",
+                            "Lugar Ocupado",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+
+                        return; // Se detiene el proceso de guardado
+                    }
+                }
+
 
                 // --- 5. CREAR DOCUMENTO ---
                 var nuevaReunion = new BsonDocument
@@ -184,7 +262,7 @@ namespace ProyectoMini
                 CargarParticipantes();
                 clbParticipantes.CheckOnClick = true;
 
-                // --- VALIDACIÓN PARA EDICIÓN ---
+                // VALIDACIÓN PARA MODIFICAR 
                 if (esEdicion && reunionAEditar != null)
                 {
                     // A. Llenar los campos de texto
@@ -192,7 +270,7 @@ namespace ProyectoMini
                     guna2TextBox2.Text = reunionAEditar.Contains("Lugar") ? reunionAEditar["Lugar"].ToString() : "";
 
                     // B. Configurar fechas y horas (CONVERSIÓN DE STRING A DATETIME)
-                    // Leemos los strings que guardamos: "dd/MM/yyyy" y "HH:mm"
+                    
 
                     if (reunionAEditar.Contains("fechaReunion"))
                     {
@@ -246,7 +324,7 @@ namespace ProyectoMini
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar datos para edición: " + ex.Message);
+                MessageBox.Show("Error al cargar datos para edición: " + ex.Message, "mensaje importante", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -271,7 +349,7 @@ namespace ProyectoMini
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar usuarios: " + ex.Message);
+                MessageBox.Show("Error al cargar usuarios: " + ex.Message, "mensaje importante", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -300,19 +378,21 @@ namespace ProyectoMini
             }
         }
 
-        private void guna2DateTimePicker1_ValueChanged(object sender, EventArgs e)
-        {
+       
 
-        }
-
-        private void btnsalir_Click_1(object sender, EventArgs e)
+        private void btnsalir_Click_1(object sender, EventArgs e) // Boton salir
         {
-            DialogResult result = MessageBox.Show("¿ desea salir ?", "mensaje importante", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+            DialogResult result = MessageBox.Show("¿Desea cerrar sesión?", "Mensaje Importante", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+
             if (result == DialogResult.OK)
             {
-                Application.Exit();
+                Form1 Inicio = new Form1();
+                Inicio.Show();
+                this.Close();
             }
         }
+
+        
     }
 }
 
