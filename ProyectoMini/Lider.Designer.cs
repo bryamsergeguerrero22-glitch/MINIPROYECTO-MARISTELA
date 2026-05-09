@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Lider));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             this.btnsalir = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
@@ -42,27 +42,35 @@
             this.guna2Button1 = new Guna.UI2.WinForms.Guna2Button();
             this.gunaDGVConsultarLider = new Guna.UI2.WinForms.Guna2DataGridView();
             this.guna2btnModificarReunion = new Guna.UI2.WinForms.Guna2Button();
-            this.guna2ControlBox1 = new Guna.UI2.WinForms.Guna2ControlBox();
-            this.guna2ControlBox2 = new Guna.UI2.WinForms.Guna2ControlBox();
+            this.cmbFiltro = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.guna2GradientPanel2 = new Guna.UI2.WinForms.Guna2GradientPanel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.guna2PictureBox3 = new Guna.UI2.WinForms.Guna2PictureBox();
+            this.gunabtnConsultaFiltro = new Guna.UI2.WinForms.Guna2Button();
+            this.txtValorBusqueda = new System.Windows.Forms.TextBox();
             this.guna2Panel1.SuspendLayout();
             this.guna2Panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gunaDGVConsultarLider)).BeginInit();
+            this.guna2GradientPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox3)).BeginInit();
             this.SuspendLayout();
             // 
             // guna2Panel1
             // 
-            this.guna2Panel1.BackColor = System.Drawing.Color.Transparent;
+            this.guna2Panel1.BackColor = System.Drawing.Color.Teal;
+            this.guna2Panel1.BorderColor = System.Drawing.Color.Teal;
             this.guna2Panel1.Controls.Add(this.btnsalir);
             this.guna2Panel1.Controls.Add(this.guna2Panel2);
             this.guna2Panel1.Controls.Add(this.gunabtnProgramarReunion);
             this.guna2Panel1.Controls.Add(this.guna2Button1);
             this.guna2Panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.guna2Panel1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(202)))), ((int)(((byte)(183)))));
+            this.guna2Panel1.FillColor = System.Drawing.Color.Teal;
             this.guna2Panel1.Location = new System.Drawing.Point(0, 0);
             this.guna2Panel1.Margin = new System.Windows.Forms.Padding(4);
             this.guna2Panel1.Name = "guna2Panel1";
-            this.guna2Panel1.Size = new System.Drawing.Size(292, 558);
+            this.guna2Panel1.Size = new System.Drawing.Size(292, 786);
             this.guna2Panel1.TabIndex = 0;
             // 
             // btnsalir
@@ -82,7 +90,7 @@
             this.btnsalir.Image = ((System.Drawing.Image)(resources.GetObject("btnsalir.Image")));
             this.btnsalir.ImageAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.btnsalir.ImageSize = new System.Drawing.Size(30, 30);
-            this.btnsalir.Location = new System.Drawing.Point(0, 506);
+            this.btnsalir.Location = new System.Drawing.Point(0, 734);
             this.btnsalir.Margin = new System.Windows.Forms.Padding(4);
             this.btnsalir.Name = "btnsalir";
             this.btnsalir.Padding = new System.Windows.Forms.Padding(7, 6, 7, 6);
@@ -95,7 +103,7 @@
             // 
             this.guna2Panel2.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.guna2Panel2.BackColor = System.Drawing.Color.Transparent;
-            this.guna2Panel2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(161)))), ((int)(((byte)(146)))));
+            this.guna2Panel2.BorderColor = System.Drawing.Color.Teal;
             this.guna2Panel2.BorderRadius = 18;
             this.guna2Panel2.BorderThickness = 3;
             this.guna2Panel2.Controls.Add(this.guna2PictureBox1);
@@ -195,37 +203,35 @@
             // 
             // gunaDGVConsultarLider
             // 
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(210)))), ((int)(((byte)(200)))));
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.Black;
-            this.gunaDGVConsultarLider.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle7;
-            this.gunaDGVConsultarLider.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(210)))), ((int)(((byte)(200)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.Black;
+            this.gunaDGVConsultarLider.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.gunaDGVConsultarLider.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCells;
             this.gunaDGVConsultarLider.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
             this.gunaDGVConsultarLider.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(230)))), ((int)(((byte)(239)))), ((int)(((byte)(238)))));
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(178)))), ((int)(((byte)(161)))));
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(178)))), ((int)(((byte)(161)))));
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.gunaDGVConsultarLider.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(178)))), ((int)(((byte)(161)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(95)))), ((int)(((byte)(178)))), ((int)(((byte)(161)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.gunaDGVConsultarLider.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.gunaDGVConsultarLider.ColumnHeadersHeight = 40;
             this.gunaDGVConsultarLider.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.BackColor = System.Drawing.Color.White;
-            dataGridViewCellStyle9.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle9.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(210)))), ((int)(((byte)(200)))));
-            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.Color.Black;
-            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.gunaDGVConsultarLider.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(210)))), ((int)(((byte)(200)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.Black;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.gunaDGVConsultarLider.DefaultCellStyle = dataGridViewCellStyle3;
             this.gunaDGVConsultarLider.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(229)))), ((int)(((byte)(255)))));
-            this.gunaDGVConsultarLider.Location = new System.Drawing.Point(363, 106);
+            this.gunaDGVConsultarLider.Location = new System.Drawing.Point(348, 337);
             this.gunaDGVConsultarLider.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gunaDGVConsultarLider.MultiSelect = false;
             this.gunaDGVConsultarLider.Name = "gunaDGVConsultarLider";
@@ -273,7 +279,7 @@
             this.guna2btnModificarReunion.ForeColor = System.Drawing.Color.White;
             this.guna2btnModificarReunion.Image = ((System.Drawing.Image)(resources.GetObject("guna2btnModificarReunion.Image")));
             this.guna2btnModificarReunion.ImageSize = new System.Drawing.Size(30, 30);
-            this.guna2btnModificarReunion.Location = new System.Drawing.Point(772, 490);
+            this.guna2btnModificarReunion.Location = new System.Drawing.Point(717, 695);
             this.guna2btnModificarReunion.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.guna2btnModificarReunion.Name = "guna2btnModificarReunion";
             this.guna2btnModificarReunion.Size = new System.Drawing.Size(281, 55);
@@ -282,36 +288,102 @@
             this.guna2btnModificarReunion.UseTransparentBackground = true;
             this.guna2btnModificarReunion.Click += new System.EventHandler(this.guna2btnModificarReunion_Click);
             // 
-            // guna2ControlBox1
+            // cmbFiltro
             // 
-            this.guna2ControlBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.guna2ControlBox1.ControlBoxType = Guna.UI2.WinForms.Enums.ControlBoxType.MaximizeBox;
-            this.guna2ControlBox1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(176)))), ((int)(((byte)(157)))));
-            this.guna2ControlBox1.IconColor = System.Drawing.Color.White;
-            this.guna2ControlBox1.Location = new System.Drawing.Point(1364, 0);
-            this.guna2ControlBox1.Name = "guna2ControlBox1";
-            this.guna2ControlBox1.Size = new System.Drawing.Size(52, 40);
-            this.guna2ControlBox1.TabIndex = 6;
+            this.cmbFiltro.FormattingEnabled = true;
+            this.cmbFiltro.Items.AddRange(new object[] {
+            "ID",
+            "Mes",
+            "Fecha",
+            "Organizador"});
+            this.cmbFiltro.Location = new System.Drawing.Point(369, 183);
+            this.cmbFiltro.Name = "cmbFiltro";
+            this.cmbFiltro.Size = new System.Drawing.Size(280, 24);
+            this.cmbFiltro.TabIndex = 18;
             // 
-            // guna2ControlBox2
+            // label3
             // 
-            this.guna2ControlBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.guna2ControlBox2.ControlBoxType = Guna.UI2.WinForms.Enums.ControlBoxType.MinimizeBox;
-            this.guna2ControlBox2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(176)))), ((int)(((byte)(157)))));
-            this.guna2ControlBox2.IconColor = System.Drawing.Color.White;
-            this.guna2ControlBox2.Location = new System.Drawing.Point(1315, 0);
-            this.guna2ControlBox2.Name = "guna2ControlBox2";
-            this.guna2ControlBox2.Size = new System.Drawing.Size(51, 40);
-            this.guna2ControlBox2.TabIndex = 7;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(362, 158);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(287, 16);
+            this.label3.TabIndex = 17;
+            this.label3.Text = "Por favor seleccione la opción que desea filtrar";
+            // 
+            // guna2GradientPanel2
+            // 
+            this.guna2GradientPanel2.BackColor = System.Drawing.Color.Transparent;
+            this.guna2GradientPanel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.guna2GradientPanel2.BorderRadius = 18;
+            this.guna2GradientPanel2.Controls.Add(this.label2);
+            this.guna2GradientPanel2.Controls.Add(this.guna2PictureBox3);
+            this.guna2GradientPanel2.FillColor = System.Drawing.Color.Teal;
+            this.guna2GradientPanel2.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(176)))), ((int)(((byte)(157)))));
+            this.guna2GradientPanel2.ForeColor = System.Drawing.SystemColors.Control;
+            this.guna2GradientPanel2.Location = new System.Drawing.Point(353, 34);
+            this.guna2GradientPanel2.Margin = new System.Windows.Forms.Padding(4);
+            this.guna2GradientPanel2.Name = "guna2GradientPanel2";
+            this.guna2GradientPanel2.Size = new System.Drawing.Size(528, 78);
+            this.guna2GradientPanel2.TabIndex = 16;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI Semibold", 14.25F, System.Drawing.FontStyle.Bold);
+            this.label2.ForeColor = System.Drawing.Color.White;
+            this.label2.Location = new System.Drawing.Point(92, 21);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(231, 32);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Consultar por filtros";
+            // 
+            // guna2PictureBox3
+            // 
+            this.guna2PictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("guna2PictureBox3.Image")));
+            this.guna2PictureBox3.ImageRotate = 0F;
+            this.guna2PictureBox3.Location = new System.Drawing.Point(17, 7);
+            this.guna2PictureBox3.Margin = new System.Windows.Forms.Padding(4);
+            this.guna2PictureBox3.Name = "guna2PictureBox3";
+            this.guna2PictureBox3.Size = new System.Drawing.Size(68, 62);
+            this.guna2PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.guna2PictureBox3.TabIndex = 6;
+            this.guna2PictureBox3.TabStop = false;
+            // 
+            // gunabtnConsultaFiltro
+            // 
+            this.gunabtnConsultaFiltro.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
+            this.gunabtnConsultaFiltro.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
+            this.gunabtnConsultaFiltro.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
+            this.gunabtnConsultaFiltro.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
+            this.gunabtnConsultaFiltro.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(140)))), ((int)(((byte)(190)))), ((int)(((byte)(190)))));
+            this.gunabtnConsultaFiltro.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.gunabtnConsultaFiltro.ForeColor = System.Drawing.Color.White;
+            this.gunabtnConsultaFiltro.Location = new System.Drawing.Point(370, 224);
+            this.gunabtnConsultaFiltro.Name = "gunabtnConsultaFiltro";
+            this.gunabtnConsultaFiltro.Size = new System.Drawing.Size(279, 45);
+            this.gunabtnConsultaFiltro.TabIndex = 19;
+            this.gunabtnConsultaFiltro.Text = "Consultar";
+            this.gunabtnConsultaFiltro.Click += new System.EventHandler(this.gunabtnConsultaFiltro_Click);
+            // 
+            // txtValorBusqueda
+            // 
+            this.txtValorBusqueda.Location = new System.Drawing.Point(665, 181);
+            this.txtValorBusqueda.Multiline = true;
+            this.txtValorBusqueda.Name = "txtValorBusqueda";
+            this.txtValorBusqueda.Size = new System.Drawing.Size(256, 27);
+            this.txtValorBusqueda.TabIndex = 20;
             // 
             // Lider
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1415, 558);
-            this.Controls.Add(this.guna2ControlBox2);
-            this.Controls.Add(this.guna2ControlBox1);
+            this.ClientSize = new System.Drawing.Size(1415, 786);
+            this.Controls.Add(this.txtValorBusqueda);
+            this.Controls.Add(this.gunabtnConsultaFiltro);
+            this.Controls.Add(this.cmbFiltro);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.guna2GradientPanel2);
             this.Controls.Add(this.guna2btnModificarReunion);
             this.Controls.Add(this.gunaDGVConsultarLider);
             this.Controls.Add(this.guna2Panel1);
@@ -326,7 +398,11 @@
             this.guna2Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gunaDGVConsultarLider)).EndInit();
+            this.guna2GradientPanel2.ResumeLayout(false);
+            this.guna2GradientPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox3)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -342,7 +418,12 @@
         private Guna.UI2.WinForms.Guna2Panel guna2Panel2;
         private Guna.UI2.WinForms.Guna2PictureBox guna2PictureBox1;
         private Guna.UI2.WinForms.Guna2Button btnsalir;
-        private Guna.UI2.WinForms.Guna2ControlBox guna2ControlBox1;
-        private Guna.UI2.WinForms.Guna2ControlBox guna2ControlBox2;
+        private System.Windows.Forms.ComboBox cmbFiltro;
+        private System.Windows.Forms.Label label3;
+        private Guna.UI2.WinForms.Guna2GradientPanel guna2GradientPanel2;
+        private System.Windows.Forms.Label label2;
+        private Guna.UI2.WinForms.Guna2PictureBox guna2PictureBox3;
+        private Guna.UI2.WinForms.Guna2Button gunabtnConsultaFiltro;
+        private System.Windows.Forms.TextBox txtValorBusqueda;
     }
 }

@@ -49,7 +49,7 @@
             this.clbParticipantes = new System.Windows.Forms.CheckedListBox();
             this.guna2DateTimePicker2 = new Guna.UI2.WinForms.Guna2DateTimePicker();
             this.label4 = new System.Windows.Forms.Label();
-            this.guna2TextBox2 = new Guna.UI2.WinForms.Guna2TextBox();
+            this.gunatxtLugar = new Guna.UI2.WinForms.Guna2TextBox();
             this.guna2PictureBox1 = new Guna.UI2.WinForms.Guna2PictureBox();
             this.guna2PictureBox2 = new Guna.UI2.WinForms.Guna2PictureBox();
             this.guna2PictureBox3 = new Guna.UI2.WinForms.Guna2PictureBox();
@@ -58,9 +58,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.guna2PictureBox6 = new Guna.UI2.WinForms.Guna2PictureBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.guna2ControlBox1 = new Guna.UI2.WinForms.Guna2ControlBox();
-            this.guna2ControlBox2 = new Guna.UI2.WinForms.Guna2ControlBox();
-            this.guna2ControlBox3 = new Guna.UI2.WinForms.Guna2ControlBox();
+            this.gunacmbSemilleros = new Guna.UI2.WinForms.Guna2ComboBox();
             this.guna2Panel1.SuspendLayout();
             this.guna2Panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.guna2PictureBox7)).BeginInit();
@@ -82,7 +80,7 @@
             this.guna2Panel1.Controls.Add(this.guna2btnConsultarReunion);
             this.guna2Panel1.Controls.Add(this.guna2Panel2);
             this.guna2Panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.guna2Panel1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(202)))), ((int)(((byte)(183)))));
+            this.guna2Panel1.FillColor = System.Drawing.Color.Teal;
             this.guna2Panel1.Location = new System.Drawing.Point(0, 0);
             this.guna2Panel1.Margin = new System.Windows.Forms.Padding(4);
             this.guna2Panel1.Name = "guna2Panel1";
@@ -137,7 +135,7 @@
             this.guna2Button2.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.guna2Button2.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.guna2Button2.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.guna2Button2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(209)))), ((int)(((byte)(197)))));
+            this.guna2Button2.FillColor = System.Drawing.Color.Teal;
             this.guna2Button2.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold);
             this.guna2Button2.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.guna2Button2.Image = ((System.Drawing.Image)(resources.GetObject("guna2Button2.Image")));
@@ -166,14 +164,13 @@
             // guna2btnConsultarReunion
             // 
             this.guna2btnConsultarReunion.BackColor = System.Drawing.Color.Transparent;
-            this.guna2btnConsultarReunion.BorderColor = System.Drawing.Color.White;
             this.guna2btnConsultarReunion.BorderRadius = 2;
             this.guna2btnConsultarReunion.BorderThickness = 1;
             this.guna2btnConsultarReunion.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
             this.guna2btnConsultarReunion.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
             this.guna2btnConsultarReunion.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
             this.guna2btnConsultarReunion.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.guna2btnConsultarReunion.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(209)))), ((int)(((byte)(197)))));
+            this.guna2btnConsultarReunion.FillColor = System.Drawing.Color.Teal;
             this.guna2btnConsultarReunion.Font = new System.Drawing.Font("Segoe UI Semibold", 11.25F, System.Drawing.FontStyle.Bold);
             this.guna2btnConsultarReunion.ForeColor = System.Drawing.Color.WhiteSmoke;
             this.guna2btnConsultarReunion.Image = ((System.Drawing.Image)(resources.GetObject("guna2btnConsultarReunion.Image")));
@@ -189,13 +186,13 @@
             // guna2Panel2
             // 
             this.guna2Panel2.BackColor = System.Drawing.Color.Transparent;
-            this.guna2Panel2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(161)))), ((int)(((byte)(146)))));
+            this.guna2Panel2.BorderColor = System.Drawing.Color.Black;
             this.guna2Panel2.BorderRadius = 18;
             this.guna2Panel2.BorderThickness = 2;
             this.guna2Panel2.Controls.Add(this.guna2PictureBox7);
             this.guna2Panel2.Controls.Add(this.lblNombreUsuario);
             this.guna2Panel2.Controls.Add(this.lblRolUsuario);
-            this.guna2Panel2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(176)))), ((int)(((byte)(157)))));
+            this.guna2Panel2.FillColor = System.Drawing.Color.Teal;
             this.guna2Panel2.Location = new System.Drawing.Point(4, 4);
             this.guna2Panel2.Margin = new System.Windows.Forms.Padding(4);
             this.guna2Panel2.Name = "guna2Panel2";
@@ -244,12 +241,13 @@
             // 
             this.monthCalendar1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(202)))), ((int)(((byte)(183)))));
             this.monthCalendar1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.monthCalendar1.Location = new System.Drawing.Point(400, 112);
+            this.monthCalendar1.Location = new System.Drawing.Point(359, 131);
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 2;
             this.monthCalendar1.TitleBackColor = System.Drawing.Color.White;
             this.monthCalendar1.TitleForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
             this.monthCalendar1.TrailingForeColor = System.Drawing.Color.Silver;
+            this.monthCalendar1.DateSelected += new System.Windows.Forms.DateRangeEventHandler(this.monthCalendar1_DateSelected);
             // 
             // guna2TextBox1
             // 
@@ -265,7 +263,7 @@
             this.guna2TextBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.guna2TextBox1.ForeColor = System.Drawing.Color.Black;
             this.guna2TextBox1.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.guna2TextBox1.Location = new System.Drawing.Point(830, 472);
+            this.guna2TextBox1.Location = new System.Drawing.Point(753, 495);
             this.guna2TextBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.guna2TextBox1.Multiline = true;
             this.guna2TextBox1.Name = "guna2TextBox1";
@@ -289,7 +287,7 @@
             this.gunabtnAgregarReunion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(55)))), ((int)(((byte)(55)))));
             this.gunabtnAgregarReunion.Image = ((System.Drawing.Image)(resources.GetObject("gunabtnAgregarReunion.Image")));
             this.gunabtnAgregarReunion.ImageSize = new System.Drawing.Size(30, 30);
-            this.gunabtnAgregarReunion.Location = new System.Drawing.Point(1200, 517);
+            this.gunabtnAgregarReunion.Location = new System.Drawing.Point(1135, 540);
             this.gunabtnAgregarReunion.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gunabtnAgregarReunion.Name = "gunabtnAgregarReunion";
             this.gunabtnAgregarReunion.Size = new System.Drawing.Size(333, 62);
@@ -302,7 +300,7 @@
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label1.Location = new System.Drawing.Point(863, 425);
+            this.label1.Location = new System.Drawing.Point(786, 448);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(68, 23);
             this.label1.TabIndex = 6;
@@ -313,7 +311,7 @@
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label2.Location = new System.Drawing.Point(447, 426);
+            this.label2.Location = new System.Drawing.Point(397, 407);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(223, 23);
             this.label2.TabIndex = 7;
@@ -323,7 +321,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(447, 63);
+            this.label3.Location = new System.Drawing.Point(406, 82);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(174, 23);
             this.label3.TabIndex = 8;
@@ -341,7 +339,7 @@
             this.guna2DateTimePicker1.ForeColor = System.Drawing.Color.White;
             this.guna2DateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.guna2DateTimePicker1.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(158)))), ((int)(((byte)(205)))), ((int)(((byte)(188)))));
-            this.guna2DateTimePicker1.Location = new System.Drawing.Point(1261, 112);
+            this.guna2DateTimePicker1.Location = new System.Drawing.Point(1145, 135);
             this.guna2DateTimePicker1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.guna2DateTimePicker1.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.guna2DateTimePicker1.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
@@ -350,14 +348,15 @@
             this.guna2DateTimePicker1.ShowUpDown = true;
             this.guna2DateTimePicker1.Size = new System.Drawing.Size(200, 36);
             this.guna2DateTimePicker1.TabIndex = 9;
-            this.guna2DateTimePicker1.Value = new System.DateTime(2026, 4, 27, 22, 4, 1, 456);
+            this.guna2DateTimePicker1.Value = new System.DateTime(2026, 4, 27, 0, 0, 0, 0);
+            this.guna2DateTimePicker1.ValueChanged += new System.EventHandler(this.guna2DateTimePicker1_ValueChanged_1);
             // 
             // clbParticipantes
             // 
             this.clbParticipantes.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.clbParticipantes.CheckOnClick = true;
             this.clbParticipantes.FormattingEnabled = true;
-            this.clbParticipantes.Location = new System.Drawing.Point(400, 472);
+            this.clbParticipantes.Location = new System.Drawing.Point(349, 497);
             this.clbParticipantes.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.clbParticipantes.Name = "clbParticipantes";
             this.clbParticipantes.Size = new System.Drawing.Size(329, 242);
@@ -372,7 +371,7 @@
             this.guna2DateTimePicker2.Font = new System.Drawing.Font("Segoe UI", 11.25F);
             this.guna2DateTimePicker2.ForeColor = System.Drawing.Color.White;
             this.guna2DateTimePicker2.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.guna2DateTimePicker2.Location = new System.Drawing.Point(1261, 276);
+            this.guna2DateTimePicker2.Location = new System.Drawing.Point(1145, 299);
             this.guna2DateTimePicker2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.guna2DateTimePicker2.MaxDate = new System.DateTime(9998, 12, 31, 0, 0, 0, 0);
             this.guna2DateTimePicker2.MinDate = new System.DateTime(1753, 1, 1, 0, 0, 0, 0);
@@ -380,47 +379,48 @@
             this.guna2DateTimePicker2.ShowUpDown = true;
             this.guna2DateTimePicker2.Size = new System.Drawing.Size(200, 36);
             this.guna2DateTimePicker2.TabIndex = 11;
-            this.guna2DateTimePicker2.Value = new System.DateTime(2026, 4, 28, 12, 38, 21, 268);
+            this.guna2DateTimePicker2.Value = new System.DateTime(2026, 4, 28, 0, 0, 0, 0);
+            this.guna2DateTimePicker2.ValueChanged += new System.EventHandler(this.guna2DateTimePicker2_ValueChanged_1);
             // 
             // label4
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label4.Location = new System.Drawing.Point(860, 63);
+            this.label4.Location = new System.Drawing.Point(703, 82);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(273, 23);
             this.label4.TabIndex = 12;
             this.label4.Text = "Escriba el lugar donde se realizará:";
             // 
-            // guna2TextBox2
+            // gunatxtLugar
             // 
-            this.guna2TextBox2.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(135)))), ((int)(((byte)(144)))));
-            this.guna2TextBox2.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.guna2TextBox2.DefaultText = "";
-            this.guna2TextBox2.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
-            this.guna2TextBox2.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
-            this.guna2TextBox2.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.guna2TextBox2.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
-            this.guna2TextBox2.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.guna2TextBox2.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.guna2TextBox2.ForeColor = System.Drawing.Color.Black;
-            this.guna2TextBox2.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
-            this.guna2TextBox2.Location = new System.Drawing.Point(830, 112);
-            this.guna2TextBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.guna2TextBox2.Multiline = true;
-            this.guna2TextBox2.Name = "guna2TextBox2";
-            this.guna2TextBox2.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
-            this.guna2TextBox2.PlaceholderText = "";
-            this.guna2TextBox2.SelectedText = "";
-            this.guna2TextBox2.Size = new System.Drawing.Size(333, 245);
-            this.guna2TextBox2.TabIndex = 13;
+            this.gunatxtLugar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(135)))), ((int)(((byte)(144)))));
+            this.gunatxtLugar.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.gunatxtLugar.DefaultText = "";
+            this.gunatxtLugar.DisabledState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(208)))), ((int)(((byte)(208)))), ((int)(((byte)(208)))));
+            this.gunatxtLugar.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(226)))), ((int)(((byte)(226)))), ((int)(((byte)(226)))));
+            this.gunatxtLugar.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.gunatxtLugar.DisabledState.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(138)))), ((int)(((byte)(138)))), ((int)(((byte)(138)))));
+            this.gunatxtLugar.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.gunatxtLugar.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.gunatxtLugar.ForeColor = System.Drawing.Color.Black;
+            this.gunatxtLugar.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.gunatxtLugar.Location = new System.Drawing.Point(673, 131);
+            this.gunatxtLugar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.gunatxtLugar.Multiline = true;
+            this.gunatxtLugar.Name = "gunatxtLugar";
+            this.gunatxtLugar.Padding = new System.Windows.Forms.Padding(0, 4, 0, 0);
+            this.gunatxtLugar.PlaceholderText = "";
+            this.gunatxtLugar.SelectedText = "";
+            this.gunatxtLugar.Size = new System.Drawing.Size(333, 245);
+            this.gunatxtLugar.TabIndex = 13;
             // 
             // guna2PictureBox1
             // 
             this.guna2PictureBox1.BackColor = System.Drawing.Color.Transparent;
             this.guna2PictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("guna2PictureBox1.Image")));
             this.guna2PictureBox1.ImageRotate = 0F;
-            this.guna2PictureBox1.Location = new System.Drawing.Point(400, 58);
+            this.guna2PictureBox1.Location = new System.Drawing.Point(359, 77);
             this.guna2PictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.guna2PictureBox1.Name = "guna2PictureBox1";
             this.guna2PictureBox1.Size = new System.Drawing.Size(40, 33);
@@ -433,7 +433,7 @@
             this.guna2PictureBox2.BackColor = System.Drawing.Color.Transparent;
             this.guna2PictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("guna2PictureBox2.Image")));
             this.guna2PictureBox2.ImageRotate = 0F;
-            this.guna2PictureBox2.Location = new System.Drawing.Point(816, 58);
+            this.guna2PictureBox2.Location = new System.Drawing.Point(659, 77);
             this.guna2PictureBox2.Margin = new System.Windows.Forms.Padding(4);
             this.guna2PictureBox2.Name = "guna2PictureBox2";
             this.guna2PictureBox2.Size = new System.Drawing.Size(40, 33);
@@ -447,10 +447,10 @@
             this.guna2PictureBox3.BackColor = System.Drawing.Color.Transparent;
             this.guna2PictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("guna2PictureBox3.Image")));
             this.guna2PictureBox3.ImageRotate = 0F;
-            this.guna2PictureBox3.Location = new System.Drawing.Point(400, 420);
+            this.guna2PictureBox3.Location = new System.Drawing.Point(349, 401);
             this.guna2PictureBox3.Margin = new System.Windows.Forms.Padding(4);
             this.guna2PictureBox3.Name = "guna2PictureBox3";
-            this.guna2PictureBox3.Size = new System.Drawing.Size(40, 33);
+            this.guna2PictureBox3.Size = new System.Drawing.Size(41, 30);
             this.guna2PictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.guna2PictureBox3.TabIndex = 17;
             this.guna2PictureBox3.TabStop = false;
@@ -461,7 +461,7 @@
             this.guna2PictureBox4.BackColor = System.Drawing.Color.Transparent;
             this.guna2PictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("guna2PictureBox4.Image")));
             this.guna2PictureBox4.ImageRotate = 0F;
-            this.guna2PictureBox4.Location = new System.Drawing.Point(816, 420);
+            this.guna2PictureBox4.Location = new System.Drawing.Point(739, 443);
             this.guna2PictureBox4.Margin = new System.Windows.Forms.Padding(4);
             this.guna2PictureBox4.Name = "guna2PictureBox4";
             this.guna2PictureBox4.Size = new System.Drawing.Size(40, 33);
@@ -475,7 +475,7 @@
             this.guna2PictureBox5.BackColor = System.Drawing.Color.Transparent;
             this.guna2PictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("guna2PictureBox5.Image")));
             this.guna2PictureBox5.ImageRotate = 0F;
-            this.guna2PictureBox5.Location = new System.Drawing.Point(1200, 58);
+            this.guna2PictureBox5.Location = new System.Drawing.Point(1084, 81);
             this.guna2PictureBox5.Margin = new System.Windows.Forms.Padding(4);
             this.guna2PictureBox5.Name = "guna2PictureBox5";
             this.guna2PictureBox5.Size = new System.Drawing.Size(40, 33);
@@ -487,7 +487,7 @@
             // 
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label5.Location = new System.Drawing.Point(1247, 63);
+            this.label5.Location = new System.Drawing.Point(1131, 86);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(296, 23);
             this.label5.TabIndex = 23;
@@ -499,7 +499,7 @@
             this.guna2PictureBox6.BackColor = System.Drawing.Color.Transparent;
             this.guna2PictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("guna2PictureBox6.Image")));
             this.guna2PictureBox6.ImageRotate = 0F;
-            this.guna2PictureBox6.Location = new System.Drawing.Point(1200, 225);
+            this.guna2PictureBox6.Location = new System.Drawing.Point(1084, 248);
             this.guna2PictureBox6.Margin = new System.Windows.Forms.Padding(4);
             this.guna2PictureBox6.Name = "guna2PictureBox6";
             this.guna2PictureBox6.Size = new System.Drawing.Size(40, 33);
@@ -511,54 +511,36 @@
             // 
             this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label6.Font = new System.Drawing.Font("Segoe UI", 9.75F);
-            this.label6.Location = new System.Drawing.Point(1247, 230);
+            this.label6.Location = new System.Drawing.Point(1131, 253);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(256, 25);
             this.label6.TabIndex = 25;
             this.label6.Text = "Seleccione hora de finalizacion:";
             // 
-            // guna2ControlBox1
+            // gunacmbSemilleros
             // 
-            this.guna2ControlBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.guna2ControlBox1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(139)))), ((int)(((byte)(152)))), ((int)(((byte)(166)))));
-            this.guna2ControlBox1.IconColor = System.Drawing.Color.White;
-            this.guna2ControlBox1.Location = new System.Drawing.Point(1659, 16);
-            this.guna2ControlBox1.Name = "guna2ControlBox1";
-            this.guna2ControlBox1.Size = new System.Drawing.Size(45, 29);
-            this.guna2ControlBox1.TabIndex = 26;
-            // 
-            // guna2ControlBox2
-            // 
-            this.guna2ControlBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.guna2ControlBox2.ControlBoxType = Guna.UI2.WinForms.Enums.ControlBoxType.MinimizeBox;
-            this.guna2ControlBox2.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(139)))), ((int)(((byte)(152)))), ((int)(((byte)(166)))));
-            this.guna2ControlBox2.IconColor = System.Drawing.Color.White;
-            this.guna2ControlBox2.Location = new System.Drawing.Point(1619, 16);
-            this.guna2ControlBox2.Name = "guna2ControlBox2";
-            this.guna2ControlBox2.Size = new System.Drawing.Size(45, 29);
-            this.guna2ControlBox2.TabIndex = 27;
-            // 
-            // guna2ControlBox3
-            // 
-            this.guna2ControlBox3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.guna2ControlBox3.ControlBoxType = Guna.UI2.WinForms.Enums.ControlBoxType.MaximizeBox;
-            this.guna2ControlBox3.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(139)))), ((int)(((byte)(152)))), ((int)(((byte)(166)))));
-            this.guna2ControlBox3.IconColor = System.Drawing.Color.White;
-            this.guna2ControlBox3.Location = new System.Drawing.Point(1580, 16);
-            this.guna2ControlBox3.Name = "guna2ControlBox3";
-            this.guna2ControlBox3.Size = new System.Drawing.Size(45, 29);
-            this.guna2ControlBox3.TabIndex = 28;
+            this.gunacmbSemilleros.BackColor = System.Drawing.Color.Transparent;
+            this.gunacmbSemilleros.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.gunacmbSemilleros.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.gunacmbSemilleros.FocusedColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.gunacmbSemilleros.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(94)))), ((int)(((byte)(148)))), ((int)(((byte)(255)))));
+            this.gunacmbSemilleros.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.gunacmbSemilleros.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(68)))), ((int)(((byte)(88)))), ((int)(((byte)(112)))));
+            this.gunacmbSemilleros.ItemHeight = 30;
+            this.gunacmbSemilleros.Location = new System.Drawing.Point(349, 446);
+            this.gunacmbSemilleros.Name = "gunacmbSemilleros";
+            this.gunacmbSemilleros.Size = new System.Drawing.Size(329, 36);
+            this.gunacmbSemilleros.TabIndex = 26;
+            this.gunacmbSemilleros.SelectedIndexChanged += new System.EventHandler(this.gunacmbSemilleros_SelectedIndexChanged);
             // 
             // ProgramarReunion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.ClientSize = new System.Drawing.Size(1725, 767);
+            this.ClientSize = new System.Drawing.Size(1737, 767);
             this.ControlBox = false;
-            this.Controls.Add(this.guna2ControlBox3);
-            this.Controls.Add(this.guna2ControlBox2);
-            this.Controls.Add(this.guna2ControlBox1);
+            this.Controls.Add(this.gunacmbSemilleros);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.guna2PictureBox6);
             this.Controls.Add(this.label5);
@@ -567,7 +549,7 @@
             this.Controls.Add(this.guna2PictureBox3);
             this.Controls.Add(this.guna2PictureBox2);
             this.Controls.Add(this.guna2PictureBox1);
-            this.Controls.Add(this.guna2TextBox2);
+            this.Controls.Add(this.gunatxtLugar);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.guna2DateTimePicker2);
             this.Controls.Add(this.clbParticipantes);
@@ -618,7 +600,7 @@
         private System.Windows.Forms.CheckedListBox clbParticipantes;
         private Guna.UI2.WinForms.Guna2DateTimePicker guna2DateTimePicker2;
         private System.Windows.Forms.Label label4;
-        private Guna.UI2.WinForms.Guna2TextBox guna2TextBox2;
+        private Guna.UI2.WinForms.Guna2TextBox gunatxtLugar;
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel1;
         private Guna.UI2.WinForms.Guna2Button btnsalir;
         private Guna.UI2.WinForms.Guna2Panel guna2Panel2;
@@ -632,8 +614,6 @@
         private Guna.UI2.WinForms.Guna2PictureBox guna2PictureBox6;
         private System.Windows.Forms.Label label6;
         private Guna.UI2.WinForms.Guna2PictureBox guna2PictureBox7;
-        private Guna.UI2.WinForms.Guna2ControlBox guna2ControlBox1;
-        private Guna.UI2.WinForms.Guna2ControlBox guna2ControlBox2;
-        private Guna.UI2.WinForms.Guna2ControlBox guna2ControlBox3;
+        private Guna.UI2.WinForms.Guna2ComboBox gunacmbSemilleros;
     }
 }

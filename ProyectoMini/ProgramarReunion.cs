@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Guna.UI2.WinForms;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -17,14 +18,15 @@ namespace ProyectoMini
         IMongoDatabase database;
         IMongoCollection<BsonDocument> UsuarioCollection;
         IMongoCollection<BsonDocument> reunionesCollection;
+        IMongoCollection<BsonDocument> SemilleroCollection;
         bool esEdicion = false;
+        bool cargandoDatosIniciales = false; // Nueva bandera
         BsonDocument reunionAEditar;
 
         public ProgramarReunion(string nombreRecibido, string rolRecibido)
         {
             InitializeComponent();
-            lblNombreUsuario.Text = nombreRecibido;
-            lblRolUsuario.Text = "Rol " + rolRecibido;
+            ConfiguracionInicial(nombreRecibido, rolRecibido);
             esEdicion = false;
         }
 
@@ -32,203 +34,109 @@ namespace ProyectoMini
         public ProgramarReunion(string nombreRecibido, string rolRecibido, BsonDocument datos)
         {
             InitializeComponent();
-            lblNombreUsuario.Text = nombreRecibido;
-            lblRolUsuario.Text = "Rol " + rolRecibido;
-
+            ConfiguracionInicial(nombreRecibido, rolRecibido);
             // Guardamos los datos que vienen del Líder
             this.reunionAEditar = datos;
             this.esEdicion = true;
-
             // Cambiamos el texto del botón de enviar
             gunabtnAgregarReunion.Text = "Actualizar Cambios";
+        }
+
+        private void ConfiguracionInicial(string nombre, string rol)
+        {
+            lblNombreUsuario.Text = nombre;
+            lblRolUsuario.Text = "Rol " + rol;
+
+            // Conexión a MongoDB
+            var client = new MongoClient("mongodb://localhost:27017/");
+            database = client.GetDatabase("Base_datos_Reunion");
+            UsuarioCollection = database.GetCollection<BsonDocument>("Usuario");
+            reunionesCollection = database.GetCollection<BsonDocument>("Reunion");
+            SemilleroCollection = database.GetCollection<BsonDocument>("Semillero");
+
+            clbParticipantes.CheckOnClick = true;
+            // monthCalendar1.MinDate = DateTime.Today;
         }
 
         private void gunabtnAgregarReunion_Click(object sender, EventArgs e)
         {
             try
             {
-                // --- 1. CAPTURA DE DATOS ---
+                // 1. CAPTURA DE DATOS NORMALIZADOS
                 DateTime hoy = DateTime.Today;
                 DateTime fechaBase = monthCalendar1.SelectionStart.Date;
 
+                // Usamos TimeOfDay para evitar errores de comparación de fechas internas
                 TimeSpan horaInicio = guna2DateTimePicker1.Value.TimeOfDay;
                 TimeSpan horaFin = guna2DateTimePicker2.Value.TimeOfDay;
 
-                // Convertimos a texto para la base de datos
-                string fechaTexto = fechaBase.ToString("dd/MM/yyyy");
-                string horaIniTexto = guna2DateTimePicker1.Value.ToString("HH:mm");
-                string horaFinTexto = guna2DateTimePicker2.Value.ToString("HH:mm");
+                // Convertimos el lugar a minúsculas para evitar duplicados como "SENA" y "sena"
+                string lugarNuevo = gunatxtLugar.Text.Trim().ToLower();
 
-                // --- 2. VALIDACIONES ---
+                // 2. VALIDACIONES LÓGICAS
+                if (fechaBase < hoy) { MessageBox.Show("No puedes programar en días pasados.", "Error"); return; }
+                if (fechaBase.DayOfWeek == DayOfWeek.Sunday) { MessageBox.Show("No se permiten domingos.", "Error"); return; }
+                if (horaFin <= horaInicio) { MessageBox.Show("La hora de fin debe ser mayor a la de inicio.", "Error de secuencia"); return; }
+                if (string.IsNullOrEmpty(lugarNuevo)) { MessageBox.Show("Debe ingresar un lugar.", "Campo vacío"); return; }
 
-                // A. Validación de fecha pasada
-                if (fechaBase < hoy)
+                List<string> seleccionados = clbParticipantes.CheckedItems.Cast<object>().Select(x => x.ToString()).ToList();
+                if (seleccionados.Count == 0) { MessageBox.Show("Seleccione al menos un participante."); return; }
+
+                int idActual = esEdicion ? reunionAEditar["_id"].AsInt32 : GenerarSiguienteID();
+
+                // 3. VALIDACIÓN DE CRUCE DE LUGAR (Búsqueda inteligente con Regex)
+                var filtroLugar = Builders<BsonDocument>.Filter.And(
+                    Builders<BsonDocument>.Filter.Eq("fechaReunion", fechaBase.ToString("dd/MM/yyyy")),
+                    Builders<BsonDocument>.Filter.Regex("Lugar", new BsonRegularExpression("^" + lugarNuevo + "$", "i"))
+                );
+
+                var crucesLugar = reunionesCollection.Find(filtroLugar).ToList();
+                foreach (var cl in crucesLugar)
                 {
-                    MessageBox.Show("No puedes programar reuniones en días pasados.", "Fecha Inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
+                    if (cl["_id"].AsInt32 == idActual) continue;
 
-                // B. RANGO PERMITIDO: 6 AM (6:00) a 6 PM (18:00)
-                TimeSpan limiteInferior = new TimeSpan(6, 0, 0); // 06:00
-                TimeSpan limiteSuperior = new TimeSpan(18, 0, 0); // 18:00
+                    TimeSpan exIni = TimeSpan.Parse(cl["horaInicio"].AsString);
+                    TimeSpan exFin = TimeSpan.Parse(cl["horaFin"].AsString);
 
-                if (horaInicio < limiteInferior || horaInicio > limiteSuperior ||
-                    horaFin < limiteInferior || horaFin > limiteSuperior)
-                {
-                    MessageBox.Show("Las reuniones solo pueden programarse entre las 6:00 AM y las 6:00 PM.", "Horario no permitido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                // C. Validación lógica (Fin > Inicio)
-                if (horaFin <= horaInicio)
-                {
-                    MessageBox.Show("La hora de fin debe ser mayor a la hora de inicio.", "Error de Horario", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                if (string.IsNullOrWhiteSpace(guna2TextBox2.Text))
-                {
-                    MessageBox.Show("Por favor, escriba el lugar de la reunión.", "Campo Requerido", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    return;
-                }
-
-                // --- 3. GESTIÓN DE PARTICIPANTES ---
-                List<string> seleccionados = new List<string>();
-                foreach (var item in clbParticipantes.CheckedItems)
-                {
-                    seleccionados.Add(item.ToString());
-                }
-
-                if (seleccionados.Count == 0)
-                {
-                    MessageBox.Show("Seleccione al menos un participante.");
-                    return;
-                }
-
-                // === AQUÍ VA EL NUEVO BLOQUE DE VALIDACIÓN ===
-
-                // 1. Buscamos todas las reuniones que ya existen en esa misma fecha
-                var filtroFecha = Builders<BsonDocument>.Filter.Eq("fechaReunion", fechaTexto);
-                var reunionesDelDia = reunionesCollection.Find(filtroFecha).ToList();
-                int idReunion = esEdicion ? reunionAEditar["_id"].AsInt32 : GenerarSiguienteID();
-
-                foreach (var reunionExistente in reunionesDelDia)
-                {
-                    // =========================
-                    // VALIDACIÓN DE EDICIÓN
-                    // =========================
-                    // Si estamos en modo edición, ignoramos la reunión actual
-                    // para no compararla consigo misma
-                    if (esEdicion && reunionExistente["_id"].AsInt32 == idReunion)
-                        continue;
-
-                    // =========================
-                    // OBTENCIÓN DE HORARIOS EXISTENTES
-                    // =========================
-                    // Se convierten las horas almacenadas en MongoDB a TimeSpan
-                    var exInicio = TimeSpan.Parse(reunionExistente["horaInicio"].AsString);
-                    var exFin = TimeSpan.Parse(reunionExistente["horaFin"].AsString);
-
-                    // =========================
-                    // NORMALIZACIÓN DE LUGAR
-                    // =========================
-                    // Se normaliza el texto para evitar diferencias por mayúsculas/minúsculas o espacios
-                    var lugarExistente = reunionExistente["Lugar"].ToString().Trim().ToLower();
-                    var lugarNuevo = guna2TextBox2.Text.Trim().ToLower();
-
-                    // =========================
-                    // VALIDACIÓN DE CRUCE DE HORARIOS
-                    // =========================
-                    // Se determina si las reuniones se traslapan en el tiempo
-                    bool hayCruceHorario = (horaInicio < exFin && horaFin > exInicio);
-
-                    // =========================
-                    // VALIDACIÓN 1: CONFLICTO POR PARTICIPANTES
-                    // =========================
-                    // Se obtienen los participantes de la reunión existente en BD
-                    var participantesBD = reunionExistente["Participantes"]
-                        .AsBsonArray
-                        .Select(p => p.ToString())
-                        .ToList();
-
-                    // Se comparan con los participantes seleccionados en la nueva reunión
-                    var comunes = seleccionados.Intersect(participantesBD).ToList();
-
-                    // Si hay personas en común y el horario se cruza, existe conflicto
-                    if (comunes.Count > 0 && hayCruceHorario)
+                    if (horaInicio < exFin && horaFin > exIni)
                     {
-                        string nombresOcupados = string.Join(", ", comunes);
-
-                        MessageBox.Show(
-                            $"{nombresOcupados} ya tienen una reunión de {exInicio:hh\\:mm} a {exFin:hh\\:mm}.",
-                            "Horario Ocupado",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-
-                        return; // Se detiene el proceso de guardado
-                    }
-
-                    // =========================
-                    // VALIDACIÓN 2: CONFLICTO POR LUGAR Y HORARIO
-                    // =========================
-                    // No se permite programar dos reuniones en el mismo lugar y horario,
-                    // independientemente de los participantes
-                    if (lugarExistente == lugarNuevo && hayCruceHorario)
-                    {
-                        MessageBox.Show(
-                            $"Ya existe una reunión programada en '{lugarNuevo}' en ese horario.",
-                            "Lugar Ocupado",
-                            MessageBoxButtons.OK,
-                            MessageBoxIcon.Error);
-
-                        return; // Se detiene el proceso de guardado
+                        MessageBox.Show($"El lugar '{cl["Lugar"]}' ya está ocupado en ese horario.", "Cruce de Lugar");
+                        return;
                     }
                 }
 
+                // 4. CREACIÓN DEL DOCUMENTO
+                var docReunion = new BsonDocument {
+                    { "_id", idActual },
+                     { "Semillero", gunacmbSemilleros.SelectedItem?.ToString() ?? "" },
+                    { "fechaReunion", fechaBase.ToString("dd/MM/yyyy") },
+                    { "horaInicio", guna2DateTimePicker1.Value.ToString("HH:mm") },
+                    { "horaFin", guna2DateTimePicker2.Value.ToString("HH:mm") },
+                    { "descripcionReunion", guna2TextBox1.Text.Trim() },
+                    { "Lugar", lugarNuevo },
+                    { "Creador", lblNombreUsuario.Text },
+                    { "Participantes", new BsonArray(seleccionados) }
+                };
 
-                // --- 5. CREAR DOCUMENTO ---
-                var nuevaReunion = new BsonDocument
-        {
-            { "_id", idReunion },
-            { "fechaReunion", fechaTexto },
-            { "horaInicio", horaIniTexto },
-            { "horaFin", horaFinTexto },
-            { "descripcionReunion", guna2TextBox1.Text.Trim() },
-            { "Lugar", guna2TextBox2.Text.Trim() },
-            { "Creador", lblNombreUsuario.Text.Trim() },
-            { "Participantes", new BsonArray(seleccionados) }
-        };
-
-                // --- 6. GUARDADO Y REDIRECCIÓN ---
+                // 5. GUARDADO EN MONGODB
                 if (esEdicion)
-                {
-                    var filtro = Builders<BsonDocument>.Filter.Eq("_id", idReunion);
-                    reunionesCollection.ReplaceOne(filtro, nuevaReunion);
-                    MessageBox.Show("La reunión se ha actualizado con éxito, por favor realice la consulta.", "Actualización Exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                    reunionesCollection.ReplaceOne(Builders<BsonDocument>.Filter.Eq("_id", idActual), docReunion);
                 else
-                {
-                    reunionesCollection.InsertOne(nuevaReunion);
-                    MessageBox.Show("Se ha registrado la reunión con éxito por favor realice la consulta.", "Registro Exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
+                    reunionesCollection.InsertOne(docReunion);
 
-                // EN AMBOS CASOS: Mandar al Form de Líder y cerrar este
-                // Nota: Asegúrate que lblRolUsuario tenga el texto correcto para el constructor
-                string rolLimpio = lblRolUsuario.Text.Replace("Rol ", "").Trim();
-                Lider liderForm = new Lider(lblNombreUsuario.Text.Trim(), rolLimpio);
+                MessageBox.Show("Reunión guardada exitosamente.", "Éxito");
+
+                // 6. NAVEGACIÓN AL FORMULARIO LIDER
+                string soloRol = lblRolUsuario.Text.Replace("Rol ", "");
+                Lider liderForm = new Lider(lblNombreUsuario.Text, soloRol);
                 liderForm.Show();
                 this.Close();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al procesar la reunión: " + ex.Message);
-            }
+            catch (Exception ex) { MessageBox.Show("Error: " + ex.Message); }
+
+
 
         }
-
-
-
-
 
 
 
@@ -239,121 +147,87 @@ namespace ProyectoMini
             this.Hide();
         }
 
-        private void btnsalir_Click(object sender, EventArgs e)
-        {
-            DialogResult result = MessageBox.Show("¿ desea salir ?", "mensaje importante", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
-            if (result == DialogResult.OK)
-            {
-                Application.Exit();
-            }
-        }
+        
 
         private void ProgramarReunion_Load(object sender, EventArgs e)
         {
-            try
+            cargandoDatosIniciales = true; // Bloqueamos disparos de eventos
+
+            CargarSemilleros();
+
+            if (esEdicion && reunionAEditar != null)
             {
-                // 1. Conexión y carga inicial
-                var client = new MongoClient("mongodb://localhost:27017/");
-                database = client.GetDatabase("Base_datos_Reunion");
-
-                UsuarioCollection = database.GetCollection<BsonDocument>("Usuario");
-                reunionesCollection = database.GetCollection<BsonDocument>("Reunion");
-
-                CargarParticipantes();
-                clbParticipantes.CheckOnClick = true;
-
-                // VALIDACIÓN PARA MODIFICAR 
-                if (esEdicion && reunionAEditar != null)
-                {
-                    // A. Llenar los campos de texto
-                    guna2TextBox1.Text = reunionAEditar.Contains("descripcionReunion") ? reunionAEditar["descripcionReunion"].ToString() : "";
-                    guna2TextBox2.Text = reunionAEditar.Contains("Lugar") ? reunionAEditar["Lugar"].ToString() : "";
-
-                    // B. Configurar fechas y horas (CONVERSIÓN DE STRING A DATETIME)
-                    
-
-                    if (reunionAEditar.Contains("fechaReunion"))
-                    {
-                        string fechaStr = reunionAEditar["fechaReunion"].AsString;
-                        DateTime fechaCargada = DateTime.ParseExact(fechaStr, "dd/MM/yyyy", null);
-                        monthCalendar1.SetDate(fechaCargada);
-                    }
-
-                    if (reunionAEditar.Contains("horaInicio"))
-                    {
-                        string horaIniStr = reunionAEditar["horaInicio"].AsString;
-                        // Usamos la fecha de hoy solo como base para que el control muestre la hora
-                        guna2DateTimePicker1.Value = DateTime.ParseExact(horaIniStr, "HH:mm", null);
-                    }
-
-                    if (reunionAEditar.Contains("horaFin"))
-                    {
-                        string horaFinStr = reunionAEditar["horaFin"].AsString;
-                        guna2DateTimePicker2.Value = DateTime.ParseExact(horaFinStr, "HH:mm", null);
-                    }
-
-                    // C. Marcar los participantes (Mantenemos tu lógica de validación de Array o String)
-                    if (reunionAEditar.Contains("Participantes"))
-                    {
-                        var valorParticipantes = reunionAEditar["Participantes"];
-
-                        if (valorParticipantes.IsBsonArray)
-                        {
-                            var listaParticipantesBD = valorParticipantes.AsBsonArray;
-                            for (int i = 0; i < clbParticipantes.Items.Count; i++)
-                            {
-                                if (listaParticipantesBD.Contains(clbParticipantes.Items[i].ToString()))
-                                {
-                                    clbParticipantes.SetItemChecked(i, true);
-                                }
-                            }
-                        }
-                        else if (valorParticipantes.IsString)
-                        {
-                            string nombreUnico = valorParticipantes.AsString;
-                            for (int i = 0; i < clbParticipantes.Items.Count; i++)
-                            {
-                                if (clbParticipantes.Items[i].ToString() == nombreUnico)
-                                {
-                                    clbParticipantes.SetItemChecked(i, true);
-                                }
-                            }
-                        }
-                    }
-                }
+                CargarDatosEdicion();
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar datos para edición: " + ex.Message, "mensaje importante", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+
+            cargandoDatosIniciales = false; // Liberamos
         }
 
-       
-
-        private void CargarParticipantes()
+        private void CargarSemilleros()
         {
             try
             {
-                var usuarios = UsuarioCollection.Find(new BsonDocument()).ToList();
-                clbParticipantes.Items.Clear();
-
-                foreach (var doc in usuarios)
+                var semilleros = SemilleroCollection.Find(new BsonDocument()).ToList();
+                gunacmbSemilleros.Items.Clear();
+                foreach (var s in semilleros)
                 {
-                    // Usamos el campo "Nombres" como indicaste en tu último mensaje
-                    if (doc.Contains("Nombres"))
-                    {
-                        string nombre = doc.GetValue("Nombres").AsString;
-                        clbParticipantes.Items.Add(nombre);
-                    }
+                    gunacmbSemilleros.Items.Add(s["Nombre_Semillero"].ToString());
                 }
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar usuarios: " + ex.Message, "mensaje importante", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            catch (Exception ex) { MessageBox.Show("Error al cargar semilleros: " + ex.Message); }
         }
 
-       
+
+
+        private void CargarDatosEdicion()
+        {
+            try
+            {
+                DateTime fecha = DateTime.ParseExact(reunionAEditar["fechaReunion"].AsString, "dd/MM/yyyy", null);
+                monthCalendar1.SetDate(fecha);
+                gunatxtLugar.Text = reunionAEditar["Lugar"].AsString;
+                guna2TextBox1.Text = reunionAEditar["descripcionReunion"].AsString;
+                guna2DateTimePicker1.Value = DateTime.Today.Add(TimeSpan.Parse(reunionAEditar["horaInicio"].AsString));
+                guna2DateTimePicker2.Value = DateTime.Today.Add(TimeSpan.Parse(reunionAEditar["horaFin"].AsString));
+
+                // OBTENER PARTICIPANTES GUARDADOS
+                List<string> participantesGuardados = new List<string>();
+                if (reunionAEditar.Contains("Participantes"))
+                {
+                    participantesGuardados = reunionAEditar["Participantes"].AsBsonArray
+                                             .Select(p => p.ToString()).ToList();
+                }
+
+                // BUSCAR EL SEMILLERO A PARTIR DEL PRIMER PARTICIPANTE
+                string semilleroEncontrado = "";
+                if (participantesGuardados.Count > 0)
+                {
+                    var filtroUsuario = Builders<BsonDocument>.Filter.Eq("Nombres", participantesGuardados[0]);
+                    var usuarioDoc = UsuarioCollection.Find(filtroUsuario).FirstOrDefault();
+                    if (usuarioDoc != null && usuarioDoc.Contains("Nombre_Semillero"))
+                        semilleroEncontrado = usuarioDoc["Nombre_Semillero"].ToString();
+                }
+
+                // SELECCIONAR EL SEMILLERO EN EL COMBOBOX
+                if (!string.IsNullOrEmpty(semilleroEncontrado))
+                {
+                    int idx = gunacmbSemilleros.Items.IndexOf(semilleroEncontrado);
+                    if (idx >= 0)
+                        gunacmbSemilleros.SelectedIndex = idx;
+                }
+
+                // LLENAR LA LISTA CON TODOS LOS USUARIOS DEL SEMILLERO
+                ActualizarListaParticipantes();
+
+                // MARCAR LOS QUE YA ESTABAN EN LA REUNIÓN
+                for (int i = 0; i < clbParticipantes.Items.Count; i++)
+                {
+                    if (participantesGuardados.Contains(clbParticipantes.Items[i].ToString()))
+                        clbParticipantes.SetItemChecked(i, true);
+                }
+            }
+            catch (Exception ex) { MessageBox.Show("Error al cargar edición: " + ex.Message); }
+        }
 
         private int GenerarSiguienteID()
         {
@@ -393,6 +267,201 @@ namespace ProyectoMini
         }
 
         
+
+        private void gunacmbSemilleros_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // SI ESTAMOS CARGANDO DATOS DE EDICIÓN, NO HACEMOS NADA AQUÍ
+            if (cargandoDatosIniciales) return;
+
+            try
+            {
+                // --- 1. CAPTURA DE DATOS (Para que ya no salgan en rojo) ---
+                // Obtenemos los valores actuales de los controles de tu formulario
+                string fechaSeleccionada = monthCalendar1.SelectionStart.ToString("dd/MM/yyyy");
+                TimeSpan horaInicio = guna2DateTimePicker1.Value.TimeOfDay;
+                TimeSpan horaFin = guna2DateTimePicker2.Value.TimeOfDay;
+
+                // 2. Obtener el semillero seleccionado
+                if (gunacmbSemilleros.SelectedItem == null) return;
+                string semillero = gunacmbSemilleros.SelectedItem.ToString();
+
+                // 3. Consultar MongoDB (Filtro por Semillero y Rol)
+                var filtro = Builders<BsonDocument>.Filter.And(
+                    Builders<BsonDocument>.Filter.Eq("Nombre_Semillero", semillero));
+
+                var listaUsuarios = UsuarioCollection.Find(filtro).ToList();
+
+                // 4. Limpiar el CheckedListBox
+                clbParticipantes.Items.Clear();
+
+                // 5. Llenar con validación de disponibilidad
+                foreach (var usuario in listaUsuarios)
+                {
+                    string nombre = usuario["Nombres"].ToString();
+
+                    // Ahora las variables ya existen y se pasan correctamente
+                    if (EstaDisponible(nombre, fechaSeleccionada, horaInicio, horaFin))
+                    {
+                        clbParticipantes.Items.Add(nombre);
+                    }
+                }
+
+                if (listaUsuarios.Count == 0)
+                {
+                    MessageBox.Show("No hay investigadores registrados en este semillero.", "Aviso");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar participantes: " + ex.Message);
+            }
+        }
+
+        private bool EstaDisponible(string nombreParticipante, string fecha, TimeSpan inicioNuevo, TimeSpan finNuevo)
+        {
+            var filtroFecha = Builders<BsonDocument>.Filter.Eq("fechaReunion", fecha);
+            var reunionesDelDia = reunionesCollection.Find(filtroFecha).ToList();
+
+            foreach (var reunion in reunionesDelDia)
+            {
+                // Si es edición, ignoramos la reunión que estamos editando actualmente
+                if (esEdicion && reunionAEditar != null && reunion["_id"].AsInt32 == reunionAEditar["_id"].AsInt32)
+                    continue;
+
+                var participantes = reunion["Participantes"].AsBsonArray.Select(p => p.ToString()).ToList();
+
+                if (participantes.Contains(nombreParticipante))
+                {
+                    TimeSpan exInicio = TimeSpan.Parse(reunion["horaInicio"].AsString);
+                    TimeSpan exFin = TimeSpan.Parse(reunion["horaFin"].AsString);
+
+                    if (inicioNuevo < exFin && finNuevo > exInicio) return false;
+                }
+            }
+            return true;
+        }
+
+
+        // Método para refrescar la lista de participantes según disponibilidad actual
+        private void ActualizarListaParticipantes()
+        {
+            if (gunacmbSemilleros.SelectedItem == null) return;
+
+            try
+            {
+                string semillero = gunacmbSemilleros.SelectedItem.ToString();
+                string fecha = monthCalendar1.SelectionStart.ToString("dd/MM/yyyy");
+                TimeSpan inicio = guna2DateTimePicker1.Value.TimeOfDay;
+                TimeSpan fin = guna2DateTimePicker2.Value.TimeOfDay;
+
+                var filtro = Builders<BsonDocument>.Filter.Eq("Nombre_Semillero", semillero);
+
+                var investigadores = UsuarioCollection.Find(filtro).ToList();
+                clbParticipantes.Items.Clear();
+
+                foreach (var inv in investigadores)
+                {
+                    // Importante: Usamos "Nombres" para ser consistentes con tu DB
+                    string nombre = inv.Contains("Nombres") ? inv["Nombres"].ToString() : inv["Nombre"].ToString();
+
+                    if (EstaDisponible(nombre, fecha, inicio, fin))
+                    {
+                        clbParticipantes.Items.Add(nombre);
+                    }
+                }
+            }
+            catch (Exception ex) { Console.WriteLine("Error dinámico: " + ex.Message); }
+        }
+
+     
+
+        private void guna2DateTimePicker1_ValueChanged_1(object sender, EventArgs e)
+        {
+            // Definimos el rango permitido
+            TimeSpan limiteManana = new TimeSpan(6, 0, 0);
+            TimeSpan limiteTarde = new TimeSpan(18, 0, 0);
+            TimeSpan actual = guna2DateTimePicker1.Value.TimeOfDay;
+
+            if (actual < limiteManana || actual > limiteTarde)
+            {
+                MessageBox.Show("El horario permitido es de 6:00 AM a 6:00 PM.", "Aviso");
+
+                // Forzamos el reinicio a las 6:00 AM
+                guna2DateTimePicker1.Value = DateTime.Today.AddHours(6);
+            }
+            ActualizarListaParticipantes();
+        }
+
+        private void guna2DateTimePicker2_ValueChanged_1(object sender, EventArgs e)
+        {
+            // IMPORTANTE: Comparamos .TimeOfDay en ambos
+            TimeSpan inicio = guna2DateTimePicker1.Value.TimeOfDay;
+            TimeSpan fin = guna2DateTimePicker2.Value.TimeOfDay;
+
+            TimeSpan limiteManana = new TimeSpan(6, 0, 0);
+            TimeSpan limiteTarde = new TimeSpan(18, 0, 0);
+
+            if (fin < limiteManana || fin > limiteTarde)
+            {
+                MessageBox.Show("La hora de fin debe estar entre las 06:00 y 18:00.", "Horario Inválido");
+                guna2DateTimePicker2.Value = DateTime.Today.AddHours(18); // Lo manda a las 6 PM
+                return;
+            }
+
+            // Aquí es donde te salía el error: comparamos solo las horas del día
+            if (fin <= inicio)
+            {
+                MessageBox.Show("La hora de finalización debe ser mayor a la de inicio.", "Error de secuencia");
+                guna2DateTimePicker2.Value = DateTime.Today.AddHours(18); // Lo limpia a las 6 PM
+            }
+
+            ActualizarListaParticipantes();
+        }
+
+        // 1. Agrega esta variable justo arriba del método (fuera de él)
+        bool procesandoFecha = false;
+        private void monthCalendar1_DateSelected(object sender, DateRangeEventArgs e)
+        {
+            // 1. Evitamos que el código se ejecute a sí mismo al resetear la fecha
+            if (procesandoFecha) return;
+
+            // Capturamos la fecha seleccionada
+            DateTime fechaSeleccionada = e.Start.Date;
+
+            // --- VALIDACIÓN 1: FECHAS PASADAS ---
+            if (fechaSeleccionada < DateTime.Today)
+            {
+                procesandoFecha = true;
+                MessageBox.Show("No puedes programar reuniones en fechas pasadas. Por favor, selecciona una fecha a partir de hoy.",
+                                "Fecha Inválida", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                LimpiarYResetearCalendario();
+                procesandoFecha = false;
+                return;
+            }
+
+            // --- VALIDACIÓN 2: DOMINGOS ---
+            if (fechaSeleccionada.DayOfWeek == DayOfWeek.Sunday)
+            {
+                procesandoFecha = true;
+                MessageBox.Show("No se permiten programar reuniones los días domingo. Por favor, seleccione un día laboral.",
+                                "Día no permitido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                LimpiarYResetearCalendario();
+                procesandoFecha = false;
+                return;
+            }
+
+            // Si pasa ambas validaciones, actualizamos la lista de participantes
+            ActualizarListaParticipantes();
+        }
+
+        // Método auxiliar para no repetir código de limpieza
+        private void LimpiarYResetearCalendario()
+        {
+            monthCalendar1.SetDate(DateTime.Today); // Regresa a hoy
+            clbParticipantes.Items.Clear();         // Limpia la lista de nombres
+        }
     }
 }
 

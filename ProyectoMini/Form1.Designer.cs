@@ -36,10 +36,9 @@
             this.guna2GradientButton1 = new Guna.UI2.WinForms.Guna2GradientButton();
             this.txtPassword = new Guna.UI2.WinForms.Guna2TextBox();
             this.txtID = new Guna.UI2.WinForms.Guna2TextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.guna2ControlBox1 = new Guna.UI2.WinForms.Guna2ControlBox();
             this.guna2WinProgressIndicator1 = new Guna.UI2.WinForms.Guna2WinProgressIndicator();
-            this.label1 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -52,7 +51,7 @@
             this.guna2HtmlLabel2.BackColor = System.Drawing.Color.Transparent;
             this.guna2HtmlLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.guna2HtmlLabel2.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.guna2HtmlLabel2.Location = new System.Drawing.Point(405, 256);
+            this.guna2HtmlLabel2.Location = new System.Drawing.Point(668, 207);
             this.guna2HtmlLabel2.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel2.Name = "guna2HtmlLabel2";
             this.guna2HtmlLabel2.Size = new System.Drawing.Size(96, 22);
@@ -84,7 +83,7 @@
             this.guna2GradientButton1.FillColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(156)))), ((int)(((byte)(124)))));
             this.guna2GradientButton1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
             this.guna2GradientButton1.ForeColor = System.Drawing.Color.White;
-            this.guna2GradientButton1.Location = new System.Drawing.Point(352, 404);
+            this.guna2GradientButton1.Location = new System.Drawing.Point(615, 355);
             this.guna2GradientButton1.Margin = new System.Windows.Forms.Padding(4);
             this.guna2GradientButton1.Name = "guna2GradientButton1";
             this.guna2GradientButton1.Size = new System.Drawing.Size(379, 55);
@@ -96,7 +95,7 @@
             // txtPassword
             // 
             this.txtPassword.BackColor = System.Drawing.Color.Transparent;
-            this.txtPassword.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(210)))), ((int)(((byte)(200)))));
+            this.txtPassword.BorderColor = System.Drawing.Color.Teal;
             this.txtPassword.BorderRadius = 10;
             this.txtPassword.BorderThickness = 2;
             this.txtPassword.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -112,7 +111,7 @@
             this.txtPassword.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(195)))), ((int)(((byte)(180)))));
             this.txtPassword.IconLeft = ((System.Drawing.Image)(resources.GetObject("txtPassword.IconLeft")));
             this.txtPassword.IconLeftSize = new System.Drawing.Size(30, 30);
-            this.txtPassword.Location = new System.Drawing.Point(352, 314);
+            this.txtPassword.Location = new System.Drawing.Point(615, 265);
             this.txtPassword.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.PasswordChar = '*';
@@ -126,8 +125,8 @@
             // 
             // txtID
             // 
-            this.txtID.BackColor = System.Drawing.Color.Transparent;
-            this.txtID.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(210)))), ((int)(((byte)(200)))));
+            this.txtID.BackColor = System.Drawing.Color.Cornsilk;
+            this.txtID.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(33)))), ((int)(((byte)(137)))), ((int)(((byte)(163)))));
             this.txtID.BorderRadius = 10;
             this.txtID.BorderThickness = 2;
             this.txtID.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -143,7 +142,7 @@
             this.txtID.HoverState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(130)))), ((int)(((byte)(195)))), ((int)(((byte)(180)))));
             this.txtID.IconLeft = ((System.Drawing.Image)(resources.GetObject("txtID.IconLeft")));
             this.txtID.IconLeftSize = new System.Drawing.Size(30, 30);
-            this.txtID.Location = new System.Drawing.Point(352, 228);
+            this.txtID.Location = new System.Drawing.Point(615, 179);
             this.txtID.Margin = new System.Windows.Forms.Padding(5, 7, 5, 7);
             this.txtID.Name = "txtID";
             this.txtID.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(160)))), ((int)(((byte)(160)))), ((int)(((byte)(160)))));
@@ -154,17 +153,6 @@
             this.txtID.TextOffset = new System.Drawing.Point(10, 0);
             this.txtID.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtID_KeyPress);
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1069, 634);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
-            // 
             // guna2ControlBox1
             // 
             this.guna2ControlBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -173,7 +161,7 @@
             this.guna2ControlBox1.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(128)))));
             this.guna2ControlBox1.HoverState.IconColor = System.Drawing.Color.White;
             this.guna2ControlBox1.IconColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.guna2ControlBox1.Location = new System.Drawing.Point(989, 0);
+            this.guna2ControlBox1.Location = new System.Drawing.Point(1010, 0);
             this.guna2ControlBox1.Margin = new System.Windows.Forms.Padding(4);
             this.guna2ControlBox1.Name = "guna2ControlBox1";
             this.guna2ControlBox1.Size = new System.Drawing.Size(80, 68);
@@ -183,7 +171,7 @@
             // guna2WinProgressIndicator1
             // 
             this.guna2WinProgressIndicator1.BackColor = System.Drawing.Color.Transparent;
-            this.guna2WinProgressIndicator1.Location = new System.Drawing.Point(504, 480);
+            this.guna2WinProgressIndicator1.Location = new System.Drawing.Point(762, 437);
             this.guna2WinProgressIndicator1.Margin = new System.Windows.Forms.Padding(4);
             this.guna2WinProgressIndicator1.Name = "guna2WinProgressIndicator1";
             this.guna2WinProgressIndicator1.ProgressColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(156)))), ((int)(((byte)(124)))));
@@ -192,32 +180,31 @@
             this.guna2WinProgressIndicator1.Visible = false;
             this.guna2WinProgressIndicator1.Click += new System.EventHandler(this.guna2GradientButton1_Click);
             // 
-            // label1
+            // pictureBox1
             // 
-            this.label1.AutoSize = true;
-            this.label1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(44)))), ((int)(((byte)(156)))), ((int)(((byte)(124)))));
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold);
-            this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(476, 163);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(119, 32);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "SemiPlan";
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(1088, 645);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 7;
+            this.pictureBox1.TabStop = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1067, 622);
-            this.Controls.Add(this.label1);
+            this.ClientSize = new System.Drawing.Size(1088, 645);
             this.Controls.Add(this.guna2WinProgressIndicator1);
             this.Controls.Add(this.guna2ControlBox1);
             this.Controls.Add(this.guna2GradientButton1);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.txtID);
-            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.guna2HtmlLabel1);
             this.Controls.Add(this.guna2HtmlLabel2);
+            this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
@@ -237,10 +224,9 @@
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel1;
         private Guna.UI2.WinForms.Guna2GradientButton guna2GradientButton1;
         private Guna.UI2.WinForms.Guna2TextBox txtPassword;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private Guna.UI2.WinForms.Guna2ControlBox guna2ControlBox1;
         private Guna.UI2.WinForms.Guna2WinProgressIndicator guna2WinProgressIndicator1;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
